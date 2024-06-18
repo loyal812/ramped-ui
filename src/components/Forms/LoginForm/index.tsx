@@ -8,6 +8,7 @@ import Button from "@/components/Buttons";
 import Input from "@/components/InputForms";
 import axios from 'axios'
 import { showSweetAlert } from "../../../../utils/showSweetAlert";
+import Cookies from 'js-cookie';
 
 interface LoginFormProps { }
 const LoginForm: FC<LoginFormProps> = ({ }) => {
@@ -62,6 +63,8 @@ const LoginForm: FC<LoginFormProps> = ({ }) => {
                         icon: 'error',
                     });
                 } else if (response.data.message) {
+                    Cookies.set('authToken', response.data.token, { expires: 7 }); // Expires in 7 days
+
                     showSweetAlert({
                         title: 'Success!',
                         text: response.data.message,
