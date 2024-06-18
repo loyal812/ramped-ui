@@ -8,10 +8,12 @@ import Button from "@/components/Buttons";
 import Input from "@/components/InputForms";
 import axios from 'axios'
 import { showSweetAlert } from "../../../../utils/showSweetAlert";
+import { useGlobalData } from "../../../../contexts/GlobalDataContext";
 
 interface SignupFormProps { }
 const SignupForm: FC<SignupFormProps> = ({ }) => {
     const router = useRouter();
+    const { gdata, setGData } = useGlobalData();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -64,6 +66,9 @@ const SignupForm: FC<SignupFormProps> = ({ }) => {
         var validate_result = validate();
 
         if (validate_result) {
+            // loading begin
+            setGData(currentData => ({ ...currentData, isLoading: true }));
+
             try {
                 const response = await axios.post(endpoint_url, {
                     "email": email,
@@ -93,6 +98,9 @@ const SignupForm: FC<SignupFormProps> = ({ }) => {
                     icon: 'error',
                 });
             }
+
+            // loading end
+            setGData(currentData => ({ ...currentData, isLoading: false }));
         }
     }
 
