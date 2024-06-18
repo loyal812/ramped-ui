@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { validateEmail } from "../../../../utils";
 import Button from "@/components/Buttons";
 import Input from "@/components/InputForms";
+import axios from 'axios'
 
 interface SignupFormProps { }
 const SignupForm: FC<SignupFormProps> = ({ }) => {
@@ -14,27 +15,27 @@ const SignupForm: FC<SignupFormProps> = ({ }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirm_password, setConfirmPassword] = useState("");
-    const [error, setError] = useState("");
+    const [message, setMessage] = useState("");
 
     function validate() {
         if (!email) {
-            setError("Please fill email field!")
+            setMessage("Please fill email field!")
             alert("Please fill email field!")
             return false;
         } else if (!validateEmail(email)) {
-            setError("Invalid email format.")
+            setMessage("Invalid email format.")
             alert("Invalid email format.")
             return false;
         } else if (!password) {
-            setError("Please fill password field!")
+            setMessage("Please fill password field!")
             alert("Please fill password field!")
             return false;
         } else if (!confirm_password) {
-            setError("Please fill confirm password field!")
+            setMessage("Please fill confirm password field!")
             alert("Please fill confirm password field!")
             return false;
         } else if (password !== confirm_password) {
-            setError("Password and confirm password should be match!")
+            setMessage("Password and confirm password should be match!")
             alert("Password and confirm password should be match!")
             return false;
         }
@@ -42,11 +43,24 @@ const SignupForm: FC<SignupFormProps> = ({ }) => {
         return true;
     }
 
-    const RegisterUser = () => {
+    const RegisterUser = async () => {
+        const endpoint_url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/signup`
+
         var validate_result = validate();
 
         if (validate_result) {
-
+            try {
+                const response = await axios.post(endpoint_url, {
+                    "email": email,
+                    "password": password,
+                    "password2": confirm_password
+                })
+                setMessage(response.data.message)
+                alert(response.data.message)
+            } catch (error) {
+                setMessage('Sign up failed')
+                alert('Sign up failed')
+            }
         }
     }
 
