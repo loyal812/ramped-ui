@@ -7,6 +7,7 @@ import { validateEmail } from "../../../../utils";
 import Button from "@/components/Buttons";
 import Input from "@/components/InputForms";
 import axios from 'axios'
+import { showSweetAlert } from "../../../../utils/showSweetAlert";
 
 interface LoginFormProps { }
 const LoginForm: FC<LoginFormProps> = ({ }) => {
@@ -18,16 +19,25 @@ const LoginForm: FC<LoginFormProps> = ({ }) => {
 
     function validate() {
         if (!email) {
-            setMessage("Please fill email field!")
-            alert("Please fill email field!")
+            showSweetAlert({
+                title: 'Validataion Error',
+                text: "Please fill email field!",
+                icon: 'error',
+            });
             return false;
         } else if (!validateEmail(email)) {
-            setMessage("Invalid email format.")
-            alert("Invalid email format.")
+            showSweetAlert({
+                title: 'Validataion Error',
+                text: "Invalid email format!",
+                icon: 'error',
+            });
             return false;
         } else if (!password) {
-            setMessage("Please fill password field!")
-            alert("Please fill password field!")
+            showSweetAlert({
+                title: 'Validataion Error',
+                text: "Please fill password field!",
+                icon: 'error',
+            });
             return false;
         }
 
@@ -46,12 +56,26 @@ const LoginForm: FC<LoginFormProps> = ({ }) => {
                     "password": password
                 });
                 if (response.data.error) {
-                    setMessage(response.data.error);
+                    showSweetAlert({
+                        title: 'Validataion Error',
+                        text: response.data.error,
+                        icon: 'error',
+                    });
                 } else if (response.data.message) {
-                    setMessage(response.data.message);
+                    showSweetAlert({
+                        title: 'Success!',
+                        text: response.data.message,
+                        icon: 'success',
+                    }).then(() => {
+                        router.push("/dashboard")
+                    });
                 }
             } catch (error) {
-                setMessage('Sign in failed');
+                showSweetAlert({
+                    title: 'Sign in Error!',
+                    text: 'Sign in failed',
+                    icon: 'error',
+                });
             }
         }
     }
