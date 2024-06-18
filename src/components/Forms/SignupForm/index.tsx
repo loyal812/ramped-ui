@@ -6,6 +6,8 @@ import { useState } from 'react';
 import { validateEmail } from "../../../../utils";
 import Button from "@/components/Buttons";
 import Input from "@/components/InputForms";
+import axios from 'axios'
+import { showSweetAlert } from "../../../../utils/showSweetAlert";
 
 interface SignupFormProps { }
 const SignupForm: FC<SignupFormProps> = ({ }) => {
@@ -14,39 +16,83 @@ const SignupForm: FC<SignupFormProps> = ({ }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirm_password, setConfirmPassword] = useState("");
-    const [error, setError] = useState("");
 
     function validate() {
         if (!email) {
-            setError("Please fill email field!")
-            alert("Please fill email field!")
+            showSweetAlert({
+                title: 'Validataion Error',
+                text: "Please fill email field!",
+                icon: 'error',
+            });
             return false;
         } else if (!validateEmail(email)) {
-            setError("Invalid email format.")
-            alert("Invalid email format.")
+            showSweetAlert({
+                title: 'Validataion Error',
+                text: "Invalid email format!",
+                icon: 'error',
+            });
             return false;
         } else if (!password) {
-            setError("Please fill password field!")
-            alert("Please fill password field!")
+            showSweetAlert({
+                title: 'Validataion Error',
+                text: "Please fill password field!",
+                icon: 'error',
+            });
             return false;
         } else if (!confirm_password) {
-            setError("Please fill confirm password field!")
-            alert("Please fill confirm password field!")
+            showSweetAlert({
+                title: 'Validataion Error',
+                text: "Please fill confirm password field!",
+                icon: 'error',
+            });
             return false;
         } else if (password !== confirm_password) {
-            setError("Password and confirm password should be match!")
-            alert("Password and confirm password should be match!")
+            showSweetAlert({
+                title: 'Validataion Error',
+                text: "Password and confirm password should be match!",
+                icon: 'error',
+            });
             return false;
         }
 
         return true;
     }
 
-    const RegisterUser = () => {
+    const RegisterUser = async () => {
+        const endpoint_url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/signup`
+
         var validate_result = validate();
 
         if (validate_result) {
+            try {
+                const response = await axios.post(endpoint_url, {
+                    "email": email,
+                    "password": password,
+                    "password2": confirm_password
+                })
 
+                if (response.data.error) {
+                    showSweetAlert({
+                        title: 'Validataion Error',
+                        text: response.data.error,
+                        icon: 'error',
+                    });
+                } else if (response.data.message) {
+                    showSweetAlert({
+                        title: 'Success!',
+                        text: response.data.message,
+                        icon: 'success',
+                    }).then(() => {
+                        router.push("/auth/login")
+                    });
+                }
+            } catch (error) {
+                showSweetAlert({
+                    title: 'Signup Error!',
+                    text: 'Sign up failed',
+                    icon: 'error',
+                });
+            }
         }
     }
 
