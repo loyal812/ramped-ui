@@ -9,12 +9,14 @@ import Button from "@/components/Buttons";
 import Table from "@/components/Table";
 import { showSweetAlert } from "../../../utils/showSweetAlert";
 import axios from "axios";
+import { useGlobalData } from "../../../contexts/GlobalDataContext";
 
 interface DashboardContainerProps { }
 
 const DashboardContainer: FC<DashboardContainerProps> = ({ }) => {
     const [search, setSearch] = useState("");
     const [data, setData] = useState<any[]>([])
+    const { gdata, setGData } = useGlobalData();
 
     const data1 = [
         { job_name: 'Licensed Professional Counselor', company_name: "LifeStance Health", min_salary: '$90,000', max_salary: "$114,000", salary_type: "Annual" },
@@ -48,6 +50,9 @@ const DashboardContainer: FC<DashboardContainerProps> = ({ }) => {
         var validate_result = validate();
 
         if (validate_result) {
+            // loading begin
+            setGData(currentData => ({ ...currentData, isLoading: true }));
+
             try {
                 const response = await axios.post(endpoint_url, {
                     "job_name": search
@@ -79,6 +84,9 @@ const DashboardContainer: FC<DashboardContainerProps> = ({ }) => {
                     icon: 'error',
                 });
             }
+
+            // loading end
+            setGData(currentData => ({ ...currentData, isLoading: false }));
         }
     }
 

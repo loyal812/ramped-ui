@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ToastContainer } from "react-toastify";
 import "./globals.css";
+import Loading from "@/components/Loader/indext";
+import { GlobalDataProvider } from "../../contexts/GlobalDataContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,11 +18,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        {children}
-        <ToastContainer />
-      </body>
-    </html>
+    <GlobalDataProvider>
+      <html lang="en">
+        <body className={inter.className}>
+          <Loading />
+          {children}
+          <ToastContainer />
+        </body>
+      </html>
+    </GlobalDataProvider>
   );
 }
