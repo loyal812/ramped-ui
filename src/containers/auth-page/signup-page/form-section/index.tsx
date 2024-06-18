@@ -25,7 +25,7 @@ const SignupFormSection: FC<SignupFormSectionProps> = ({ }) => {
                 {/* Image and Text Wrapper */}
                 <div className="hidden md:flex md:flex-col justify-center items-center absolute top-0 bottom-0 right-0 md:w-1/2 h-screen bg-bg-basic" aria-hidden="true">
                     {/* Image */}
-                    <Image className="object-cover" src="/images/auth_page/people_pc.png" width="670" height="670" alt="Authentication" priority />
+                    <Image className="object-cover w-full h-full" src="/images/auth_page/auth_signup_bg.png" width="720" height="1110" alt="Authentication" priority />
                 </div>
 
             </div>
