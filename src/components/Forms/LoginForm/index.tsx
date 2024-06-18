@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { validateEmail } from "../../../../utils";
 import Button from "@/components/Buttons";
 import Input from "@/components/InputForms";
+import axios from 'axios'
 
 interface LoginFormProps { }
 const LoginForm: FC<LoginFormProps> = ({ }) => {
@@ -13,19 +14,19 @@ const LoginForm: FC<LoginFormProps> = ({ }) => {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError] = useState("");
+    const [message, setMessage] = useState("");
 
     function validate() {
         if (!email) {
-            setError("Please fill email field!")
+            setMessage("Please fill email field!")
             alert("Please fill email field!")
             return false;
         } else if (!validateEmail(email)) {
-            setError("Invalid email format.")
+            setMessage("Invalid email format.")
             alert("Invalid email format.")
             return false;
         } else if (!password) {
-            setError("Please fill password field!")
+            setMessage("Please fill password field!")
             alert("Please fill password field!")
             return false;
         }
@@ -33,11 +34,25 @@ const LoginForm: FC<LoginFormProps> = ({ }) => {
         return true;
     }
 
-    const SignIn = () => {
+    const SignIn = async () => {
+        const endpoint_url = `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth/signin`
+
         var validate_result = validate();
 
         if (validate_result) {
-
+            try {
+                const response = await axios.post(endpoint_url, {
+                    "email": email,
+                    "password": password
+                });
+                if (response.data.error) {
+                    setMessage(response.data.error);
+                } else if (response.data.message) {
+                    setMessage(response.data.message);
+                }
+            } catch (error) {
+                setMessage('Sign in failed');
+            }
         }
     }
 

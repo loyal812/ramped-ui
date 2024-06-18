@@ -8,7 +8,6 @@ import Button from "@/components/Buttons";
 import Input from "@/components/InputForms";
 import axios from 'axios'
 import { showSweetAlert } from "../../../../utils/showSweetAlert";
-import { showToastify } from "../../../../utils/showToastify";
 
 interface SignupFormProps { }
 const SignupForm: FC<SignupFormProps> = ({ }) => {
