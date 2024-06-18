@@ -7,6 +7,8 @@ import { validateEmail } from "../../../../utils";
 import Button from "@/components/Buttons";
 import Input from "@/components/InputForms";
 import axios from 'axios'
+import { showSweetAlert } from "../../../../utils/showSweetAlert";
+import { showToastify } from "../../../../utils/showToastify";
 
 interface SignupFormProps { }
 const SignupForm: FC<SignupFormProps> = ({ }) => {
@@ -20,23 +22,43 @@ const SignupForm: FC<SignupFormProps> = ({ }) => {
     function validate() {
         if (!email) {
             setMessage("Please fill email field!")
-            alert("Please fill email field!")
+            showSweetAlert({
+                title: 'Validataion Error',
+                text: "Please fill email field!",
+                icon: 'error',
+            });
             return false;
         } else if (!validateEmail(email)) {
             setMessage("Invalid email format.")
-            alert("Invalid email format.")
+            showSweetAlert({
+                title: 'Validataion Error',
+                text: "Invalid email format!",
+                icon: 'error',
+            });
             return false;
         } else if (!password) {
             setMessage("Please fill password field!")
-            alert("Please fill password field!")
+            showSweetAlert({
+                title: 'Validataion Error',
+                text: "Please fill password field!",
+                icon: 'error',
+            });
             return false;
         } else if (!confirm_password) {
             setMessage("Please fill confirm password field!")
-            alert("Please fill confirm password field!")
+            showSweetAlert({
+                title: 'Validataion Error',
+                text: "Please fill confirm password field!",
+                icon: 'error',
+            });
             return false;
         } else if (password !== confirm_password) {
             setMessage("Password and confirm password should be match!")
-            alert("Password and confirm password should be match!")
+            showSweetAlert({
+                title: 'Validataion Error',
+                text: "Password and confirm password should be match!",
+                icon: 'error',
+            });
             return false;
         }
 
@@ -55,11 +77,30 @@ const SignupForm: FC<SignupFormProps> = ({ }) => {
                     "password": password,
                     "password2": confirm_password
                 })
-                setMessage(response.data.message)
-                alert(response.data.message)
+                console.log(response)
+
+                if (response.data.error) {
+                    showSweetAlert({
+                        title: 'Validataion Error',
+                        text: response.data.error,
+                        icon: 'error',
+                    });
+                } else if (response.data.message) {
+                    showSweetAlert({
+                        title: 'Success!',
+                        text: response.data.message,
+                        icon: 'success',
+                    }).then(() => {
+                        router.push("/auth/login")
+                    });
+                }
             } catch (error) {
                 setMessage('Sign up failed')
-                alert('Sign up failed')
+                showSweetAlert({
+                    title: 'Signup Error!',
+                    text: 'Sign up failed',
+                    icon: 'error',
+                });
             }
         }
     }
