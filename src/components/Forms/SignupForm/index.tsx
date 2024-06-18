@@ -16,11 +16,9 @@ const SignupForm: FC<SignupFormProps> = ({ }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirm_password, setConfirmPassword] = useState("");
-    const [message, setMessage] = useState("");
 
     function validate() {
         if (!email) {
-            setMessage("Please fill email field!")
             showSweetAlert({
                 title: 'Validataion Error',
                 text: "Please fill email field!",
@@ -28,7 +26,6 @@ const SignupForm: FC<SignupFormProps> = ({ }) => {
             });
             return false;
         } else if (!validateEmail(email)) {
-            setMessage("Invalid email format.")
             showSweetAlert({
                 title: 'Validataion Error',
                 text: "Invalid email format!",
@@ -36,7 +33,6 @@ const SignupForm: FC<SignupFormProps> = ({ }) => {
             });
             return false;
         } else if (!password) {
-            setMessage("Please fill password field!")
             showSweetAlert({
                 title: 'Validataion Error',
                 text: "Please fill password field!",
@@ -44,7 +40,6 @@ const SignupForm: FC<SignupFormProps> = ({ }) => {
             });
             return false;
         } else if (!confirm_password) {
-            setMessage("Please fill confirm password field!")
             showSweetAlert({
                 title: 'Validataion Error',
                 text: "Please fill confirm password field!",
@@ -52,7 +47,6 @@ const SignupForm: FC<SignupFormProps> = ({ }) => {
             });
             return false;
         } else if (password !== confirm_password) {
-            setMessage("Password and confirm password should be match!")
             showSweetAlert({
                 title: 'Validataion Error',
                 text: "Password and confirm password should be match!",
@@ -76,7 +70,6 @@ const SignupForm: FC<SignupFormProps> = ({ }) => {
                     "password": password,
                     "password2": confirm_password
                 })
-                console.log(response)
 
                 if (response.data.error) {
                     showSweetAlert({
@@ -94,7 +87,6 @@ const SignupForm: FC<SignupFormProps> = ({ }) => {
                     });
                 }
             } catch (error) {
-                setMessage('Sign up failed')
                 showSweetAlert({
                     title: 'Signup Error!',
                     text: 'Sign up failed',

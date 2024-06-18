@@ -15,7 +15,6 @@ const LoginForm: FC<LoginFormProps> = ({ }) => {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [message, setMessage] = useState("");
 
     function validate() {
         if (!email) {
@@ -55,6 +54,7 @@ const LoginForm: FC<LoginFormProps> = ({ }) => {
                     "email": email,
                     "password": password
                 });
+
                 if (response.data.error) {
                     showSweetAlert({
                         title: 'Validataion Error',
